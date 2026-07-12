@@ -7,6 +7,7 @@
 ## Team Members
 
 - David Fulmer — GitHub: `FlameBorneWhiteHat-FB-91156`
+- Jeannie Reyes - GitHub: 
 
 ## Personal Branch
 
