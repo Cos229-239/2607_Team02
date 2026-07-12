@@ -1,13 +1,13 @@
-# Team Kindred Spirit
+# ECHIRON
 
-## Project
+## Team
 
-**ECHIRON**
+**Kindred Spirit**
 
 ## Team Members
 
 - David Fulmer — GitHub: `FlameBorneWhiteHat-FB-91156`
-- Jeannie Reyes - GitHub: 
+- Jeannie Reyes — GitHub:
 
 ## Personal Branch
 
