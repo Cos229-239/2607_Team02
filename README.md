@@ -1,8 +1,12 @@
-# Team 02 — ECHIRON
+# Team ECHIRON
 
 ## Team Members
 
 - David Fulmer — GitHub: `FlameBorneWhiteHat-FB-91156`
+
+## Personal Branch
+
+- `david-fulmer-personal`
 
 ## Project Plan
 
