@@ -1,4 +1,8 @@
-# Team ECHIRON
+# Team Kindred Spirit
+
+## Project
+
+**ECHIRON**
 
 ## Team Members
 
@@ -10,7 +14,7 @@
 
 ## Project Plan
 
-Preserve the course repository documentation and reference materials while integrating the existing ECHIRON application into David Fulmer's personal branch. Validate the imported project, commit and push all work through the personal branch, then merge tested and team-approved work into `dev` without modifying `main` directly.
+Preserve the course repository documentation and reference materials while integrating the existing ECHIRON application into the team repository through the required personal-branch workflow. Validate the imported project, commit and push all work through the personal branch, then merge tested and team-approved work into `dev` without modifying `main` directly.
 
 ## Repository Reference Material
 
