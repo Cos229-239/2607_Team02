@@ -1,0 +1,51 @@
+{
+  "expo": {
+    "name": "Echiron",
+    "slug": "echiron",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/icon.png",
+    "scheme": "echiron",
+    "userInterfaceStyle": "automatic",
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.flameborne.echiron",
+      "buildNumber": "1"
+    },
+    "android": {
+      "package": "com.flameborne.echiron",
+      "versionCode": 1,
+      "predictiveBackGestureEnabled": true,
+      "adaptiveIcon": {
+        "backgroundColor": "#0F172A",
+        "foregroundImage": "./assets/images/android-icon-foreground.png",
+        "monochromeImage": "./assets/images/android-icon-monochrome.png"
+      }
+    },
+    "web": {
+      "output": "static",
+      "favicon": "./assets/images/favicon.png"
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#0F172A",
+          "image": "./assets/images/splash-icon.png",
+          "imageWidth": 180
+        }
+      ]
+    ],
+    "experiments": {
+      "typedRoutes": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "593d28b1-d1ad-49db-a756-2bd88932c489"
+      }
+    },
+    "owner": "flameborne777"
+  }
+}
