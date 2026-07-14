@@ -19,8 +19,61 @@ enum class DayKey(val label: String) {
     SUNDAY("Sun"),
 }
 
+enum class PlanningStyle { STRUCTURED, BALANCED, FLEXIBLE }
+enum class EncouragementTone { GENTLE, BALANCED, DIRECT, ENERGETIC, REFLECTIVE }
+enum class EncouragementLength { BRIEF, DEEPER }
+
+enum class EncouragementContext {
+    EDUCATION,
+    WORK,
+    HEALTH,
+    FAMILY,
+    HOME,
+    CREATIVE,
+    FINANCE,
+    GROWTH,
+    FOCUS,
+    PLANNING,
+    RECOVERY,
+    COMMUNITY,
+    CAREGIVING,
+    TRANSITION,
+    COURAGE,
+    GENERAL,
+}
+
+enum class EncouragementSignal {
+    HIGH_PRIORITY,
+    DELAYED,
+    FIRST_TODAY,
+    MILESTONE,
+    RETURNING,
+    GOAL_ALIGNED,
+    FOCUSED,
+    LONG_CARRIED,
+    STEADY_PRACTICE,
+    SHARED_BENEFIT,
+    FOUNDATION_BUILDING,
+    RESTORATIVE,
+    CREATIVE_OUTPUT,
+    LEARNING_PROGRESS,
+    UNCERTAIN_PATH,
+    IDENTITY_ALIGNED,
+}
+
 data class UserProfile(
     val preferredName: String = "",
+    val role: String = "",
+    val goals: String = "",
+    val planningStyle: PlanningStyle = PlanningStyle.BALANCED,
+)
+
+data class EncouragementPreferences(
+    val tone: EncouragementTone = EncouragementTone.BALANCED,
+    val length: EncouragementLength = EncouragementLength.BRIEF,
+    val usePreferredName: Boolean = true,
+    val spiritualEnabled: Boolean = false,
+    val pinnedPrincipleIds: Set<String> = emptySet(),
 )
 
 data class EchironTask(
@@ -37,9 +90,25 @@ data class EchironTask(
 
 data class Encouragement(
     val id: String,
+    val sourceId: String = "",
+    val subjectTitle: String = "",
+    val subjectDetails: String = "",
+    val subjectCategory: String = "General",
+    val subjectPriority: Priority = Priority.MEDIUM,
+    val subjectCreatedAt: String = "",
+    val context: EncouragementContext = EncouragementContext.GENERAL,
+    val secondaryContext: EncouragementContext? = null,
+    val principleId: String = "legacy",
+    val principleTitle: String = "Progress without punishment",
+    val principleSource: String = "Echiron synthesis",
+    val principleSourceId: String = "echiron",
+    val matchedSignals: Set<EncouragementSignal> = emptySet(),
+    val messageId: String = id,
     val heading: String,
     val message: String,
     val createdAt: String,
+    val saved: Boolean = false,
+    val dismissed: Boolean = false,
 )
 
 data class EchironState(
@@ -48,6 +117,7 @@ data class EchironState(
     val tasks: List<EchironTask> = emptyList(),
     val focusMinutes: Int = 0,
     val focusSessions: Int = 0,
+    val encouragementPreferences: EncouragementPreferences = EncouragementPreferences(),
     val encouragementHistory: List<Encouragement> = emptyList(),
 )
 
@@ -56,23 +126,4 @@ object MomentumCalculator {
         val completed = state.tasks.count { it.completed }
         return min(100, 45 + completed * 10 + state.focusSessions * 5)
     }
-}
-
-object EncouragementEngine {
-    fun forCompletedTask(task: EchironTask): Pair<String, String> {
-        val heading = when (task.priority) {
-            Priority.URGENT -> "Pressure met with action"
-            Priority.HIGH -> "A meaningful win"
-            Priority.MEDIUM -> "Momentum is building"
-            Priority.LOW -> "Small progress still counts"
-        }
-        val message =
-            "You completed “${task.title}.” ECHIRON records the action, not a judgment of your worth. " +
-                "See the progress. Protect the next good step."
-        return heading to message
-    }
-
-    fun forFocusSession(minutes: Int): Pair<String, String> =
-        "Focus protected" to
-            "You defended $minutes minutes for meaningful work. Attention became action, and action became proof."
 }
