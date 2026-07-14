@@ -7,6 +7,7 @@ import com.flameborne.echiron.data.EchironRepository
 import com.flameborne.echiron.model.DayKey
 import com.flameborne.echiron.model.EchironState
 import com.flameborne.echiron.model.EchironTask
+import com.flameborne.echiron.model.EncouragementPreferences
 import com.flameborne.echiron.model.Priority
 import java.time.Instant
 import java.util.UUID
@@ -71,5 +72,21 @@ class EchironViewModel(application: Application) : AndroidViewModel(application)
         viewModelScope.launch {
             repository.recordFocusSession(minutes)
         }
+    }
+
+    fun toggleSavedEncouragement(recordId: String) {
+        viewModelScope.launch { repository.toggleSavedEncouragement(recordId) }
+    }
+
+    fun dismissEncouragement(recordId: String) {
+        viewModelScope.launch { repository.dismissEncouragement(recordId) }
+    }
+
+    fun requestAnotherEncouragement(recordId: String) {
+        viewModelScope.launch { repository.requestAnotherEncouragement(recordId) }
+    }
+
+    fun updateEncouragementPreferences(preferences: EncouragementPreferences) {
+        viewModelScope.launch { repository.updateEncouragementPreferences(preferences) }
     }
 }

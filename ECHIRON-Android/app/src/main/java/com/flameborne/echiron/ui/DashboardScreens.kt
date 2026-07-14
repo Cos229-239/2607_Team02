@@ -13,14 +13,18 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.weight
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.FilterChip
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -32,6 +36,10 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.flameborne.echiron.model.EchironState
+import com.flameborne.echiron.model.EncouragementCatalog
+import com.flameborne.echiron.model.EncouragementLength
+import com.flameborne.echiron.model.EncouragementPreferences
+import com.flameborne.echiron.model.EncouragementTone
 import com.flameborne.echiron.model.MomentumCalculator
 
 @Composable
@@ -209,37 +217,97 @@ internal fun ProgressScreen(state: EchironState) {
 }
 
 @Composable
-internal fun EncouragementScreen(state: EchironState) {
-    val principles =
-        listOf(
-            "Agency before automation" to "Support the person without taking ownership of the person’s choices.",
-            "Progress without punishment" to "A reset is information, not failure.",
-            "Visible effort" to "Small completed actions deserve to be seen.",
-        )
+internal fun EncouragementScreen(
+    state: EchironState,
+    onSave: (String) -> Unit,
+    onDismiss: (String) -> Unit,
+    onAnother: (String) -> Unit,
+    onUpdatePreferences: (EncouragementPreferences) -> Unit,
+) {
+    val preferences = state.encouragementPreferences
+    val visibleHistory = state.encouragementHistory.filterNot { it.dismissed }
+    val sourceCount = EncouragementCatalog.principles.map { it.sourceId }.toSet().size
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
         contentPadding = PaddingValues(16.dp, 16.dp, 16.dp, 120.dp),
         verticalArrangement = Arrangement.spacedBy(14.dp),
     ) {
-        item { Text("Encouragement engine", style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.ExtraBold) }
-        items(principles) { (title, body) ->
+        item {
+            Text("Encouragement engine", style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.ExtraBold)
+            Text(
+                "${EncouragementCatalog.principles.size} compassionate principles • $sourceCount sources • fully local",
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+        }
+        item {
             Card {
-                Column(Modifier.padding(16.dp)) {
-                    Text(title, fontWeight = FontWeight.Bold)
-                    Text(body, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Column(
+                    modifier = Modifier.fillMaxWidth().padding(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(10.dp),
+                ) {
+                    Text("Voice", fontWeight = FontWeight.Bold)
+                    LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        items(EncouragementTone.entries) { tone ->
+                            FilterChip(
+                                selected = preferences.tone == tone,
+                                onClick = { onUpdatePreferences(preferences.copy(tone = tone)) },
+                                label = { Text(tone.name.lowercase().replaceFirstChar { it.uppercase() }) },
+                            )
+                        }
+                    }
+                    Text("Message depth", fontWeight = FontWeight.Bold)
+                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        EncouragementLength.entries.forEach { length ->
+                            FilterChip(
+                                selected = preferences.length == length,
+                                onClick = { onUpdatePreferences(preferences.copy(length = length)) },
+                                label = { Text(length.name.lowercase().replaceFirstChar { it.uppercase() }) },
+                            )
+                        }
+                    }
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                    ) {
+                        Column(Modifier.weight(1f)) {
+                            Text("Spiritual language", fontWeight = FontWeight.Bold)
+                            Text("Optional and off by default", color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        }
+                        Switch(
+                            checked = preferences.spiritualEnabled,
+                            onCheckedChange = {
+                                onUpdatePreferences(preferences.copy(spiritualEnabled = it))
+                            },
+                        )
+                    }
                 }
             }
         }
         item { Text("Recent signals", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold) }
-        if (state.encouragementHistory.isEmpty()) {
+        if (visibleHistory.isEmpty()) {
             item { EmptyCard("No signals yet.", "Complete a task or record a focus block.") }
         } else {
-            items(state.encouragementHistory, key = { it.id }) { record ->
+            items(visibleHistory, key = { it.id }) { record ->
                 OutlinedCard {
-                    Column(Modifier.padding(16.dp)) {
+                    Column(
+                        modifier = Modifier.padding(16.dp),
+                        verticalArrangement = Arrangement.spacedBy(6.dp),
+                    ) {
                         Text(record.heading, fontWeight = FontWeight.Bold)
-                        Spacer(Modifier.height(4.dp))
+                        Text(
+                            "${record.principleTitle} • ${record.principleSource}",
+                            style = MaterialTheme.typography.labelMedium,
+                            color = MaterialTheme.colorScheme.secondary,
+                        )
                         Text(record.message, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                            TextButton(onClick = { onSave(record.id) }) {
+                                Text(if (record.saved) "Saved" else "Save")
+                            }
+                            TextButton(onClick = { onAnother(record.id) }) { Text("Another") }
+                            TextButton(onClick = { onDismiss(record.id) }) { Text("Dismiss") }
+                        }
                     }
                 }
             }

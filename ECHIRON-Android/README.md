@@ -26,7 +26,10 @@ The Android manifest and small resource-value files remain XML because Android r
 - Task completion history
 - Twenty-five-minute focus-session logging
 - Momentum scoring
-- Native encouragement engine
+- Native contextual encouragement engine with 134 compassionate principles from 35 philosophical, behavioral, and humanistic sources
+- Primary and secondary context classification across 16 life contexts
+- Evidence-based signal detection, deterministic weighted matching, and repetition control
+- Five voices, brief/deeper messages, Save · Another · Dismiss feedback, and opt-in spiritual language
 - Progress dashboard
 - Light and dark system themes
 - Accessibility labels and Material touch targets
@@ -68,3 +71,7 @@ app/build/outputs/apk/debug/app-debug.apk
 - `ui/theme/` — ECHIRON color system and Material 3 theme
 
 The existing Expo/React Native ECHIRON implementation remains preserved in the sibling `ECHIRON` folder. This native edition is a parallel implementation for the Android/Kotlin course requirements.
+
+## Encouragement parity
+
+The Kotlin catalog is generated from the same curated source material used by the Expo edition. Both implementations preserve the same local-first contract: no cloud model, no external API, no diagnosis, no shaming, no exaggerated guarantees, and no spiritual assumptions. The engine ranks closely relevant principles mathematically and then uses bounded weighted exploration so personal feedback can shape selection without reducing the system to one repeated phrase.

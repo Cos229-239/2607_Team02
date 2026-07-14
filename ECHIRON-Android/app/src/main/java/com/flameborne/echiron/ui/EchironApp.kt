@@ -33,6 +33,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.flameborne.echiron.model.DayKey
 import com.flameborne.echiron.model.EchironState
+import com.flameborne.echiron.model.EncouragementPreferences
 import com.flameborne.echiron.model.Priority
 import com.flameborne.echiron.ui.theme.EchironTheme
 
@@ -57,6 +58,10 @@ fun EchironApp(viewModel: EchironViewModel = viewModel()) {
                 onToggleTask = viewModel::toggleTask,
                 onDeleteTask = viewModel::deleteTask,
                 onFocus = viewModel::recordFocusSession,
+                onSaveEncouragement = viewModel::toggleSavedEncouragement,
+                onDismissEncouragement = viewModel::dismissEncouragement,
+                onAnotherEncouragement = viewModel::requestAnotherEncouragement,
+                onUpdateEncouragementPreferences = viewModel::updateEncouragementPreferences,
             )
         }
     }
@@ -70,6 +75,10 @@ private fun MainExperience(
     onToggleTask: (String) -> Unit,
     onDeleteTask: (String) -> Unit,
     onFocus: (Int) -> Unit,
+    onSaveEncouragement: (String) -> Unit,
+    onDismissEncouragement: (String) -> Unit,
+    onAnotherEncouragement: (String) -> Unit,
+    onUpdateEncouragementPreferences: (EncouragementPreferences) -> Unit,
 ) {
     var section by rememberSaveable { mutableStateOf(AppSection.TODAY) }
     var showCapture by rememberSaveable { mutableStateOf(false) }
@@ -121,7 +130,14 @@ private fun MainExperience(
                 AppSection.TASKS -> TasksScreen(state.tasks, onToggleTask, onDeleteTask)
                 AppSection.WEEK -> WeeklyPlanScreen(state.tasks, onToggleTask)
                 AppSection.PROGRESS -> ProgressScreen(state)
-                AppSection.ENCOURAGEMENT -> EncouragementScreen(state)
+                AppSection.ENCOURAGEMENT ->
+                    EncouragementScreen(
+                        state,
+                        onSaveEncouragement,
+                        onDismissEncouragement,
+                        onAnotherEncouragement,
+                        onUpdateEncouragementPreferences,
+                    )
             }
         }
     }
