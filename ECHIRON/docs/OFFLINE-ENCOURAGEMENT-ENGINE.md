@@ -40,7 +40,7 @@ Echiron's encouragement system is deliberately local and deterministic.
 
 ## Privacy
 
-No encouragement content is sent to an AI service or remote server. Preferences, history, feedback, and reflections are stored with the rest of Echiron's local application data.
+No encouragement content is sent to an AI service or remote server. All preferences, history, feedback, and reflections are stored locally as part of Echiron's application data.
 
 ## Guardrails
 
