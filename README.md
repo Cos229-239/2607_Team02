@@ -13,6 +13,8 @@
 
 ECHIRON is a human-first personal progress and encouragement application designed to help users organize priorities, recognize completed effort, protect focused time, and continue moving forward without replacing human agency.
 
+ECHIRON is intended to support productivity by helping users organize tasks, maintain focus, and build positive momentum through encouragement and progress tracking while keeping the user in control of their decisions.
+
 The repository preserves two working implementations of the same product:
 
 - `ECHIRON/` — the established Expo and React Native implementation written in TypeScript.
