@@ -78,7 +78,7 @@ ECHIRON-Android/app/build/outputs/apk/debug/app-debug.apk
 
 ## Branch Workflow
 
-1. Develop and commit work on `david-fulmer-personal`.
-2. Keep the personal branch synchronized with `dev`.
+1. Develop and commit work on your assigned personal branch.
+2. Keep your personal branch synchronized with `dev`.
 3. Merge completed and reviewed work into `dev` for shared integration.
 4. Leave `main` to the designated Build Master.
