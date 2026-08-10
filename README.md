@@ -80,3 +80,24 @@ ECHIRON-Android/app/build/outputs/apk/debug/app-debug.apk
 2. Keep the personal branch synchronized with `dev`.
 3. Merge completed and reviewed work into `dev` for shared integration.
 4. Leave `main` to the designated Build Master.
+
+## Google Calendar Integration — Initial Implementation
+
+Google Calendar integration development has begun for the native Echiron Android application. The project now includes the Google Play Services authentication dependency required for Google authorization.
+
+A dedicated `GoogleCalendarAuthorization.kt` integration layer was added to handle Google Calendar authorization separately from the UI. A new `GoogleCalendarIntegrationScreen.kt` was added to provide the user-facing Connect Google Calendar interface.
+
+The Calendar integration screen has been connected to Echiron's main application/navigation structure through `EchironApp.kt`.
+
+The initial implementation requests read-only Google Calendar access, following least-privilege principles. Echiron does not need permission to modify a user's Google Calendar for this first version.
+
+This is currently the authorization foundation, not the completed Calendar synchronization system. The next development stage will connect the OAuth configuration, retrieve the user's available calendars and events, map those events into Echiron, and test the authorization flow on an Android device/emulator.
+
+No Google passwords, OAuth secrets, access tokens, or other private credentials should ever be committed to the repository or documented in the README.
+
+### Files Affected
+
+- `ECHIRON-Android/app/build.gradle.kts`
+- `ECHIRON-Android/app/src/main/java/com/flameborne/echiron/integration/google/GoogleCalendarAuthorization.kt`
+- `ECHIRON-Android/app/src/main/java/com/flameborne/echiron/ui/GoogleCalendarIntegrationScreen.kt`
+- `ECHIRON-Android/app/src/main/java/com/flameborne/echiron/ui/EchironApp.kt`
