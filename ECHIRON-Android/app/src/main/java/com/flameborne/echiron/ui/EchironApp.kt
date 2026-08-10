@@ -10,6 +10,7 @@ import androidx.compose.material.icons.filled.AutoAwesome
 import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Insights
+import androidx.compose.material.icons.filled.Link
 import androidx.compose.material.icons.filled.TaskAlt
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
@@ -43,6 +44,7 @@ private enum class AppSection(val label: String, val icon: ImageVector) {
     WEEK("Week", Icons.Default.CalendarMonth),
     PROGRESS("Progress", Icons.Default.Insights),
     ENCOURAGEMENT("Encourage", Icons.Default.AutoAwesome),
+    INTEGRATIONS("Connect", Icons.Default.Link),
 }
 
 @Composable
@@ -138,6 +140,7 @@ private fun MainExperience(
                         onAnotherEncouragement,
                         onUpdateEncouragementPreferences,
                     )
+                AppSection.INTEGRATIONS -> GoogleCalendarIntegrationScreen()
             }
         }
     }
