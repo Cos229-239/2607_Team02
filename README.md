@@ -13,8 +13,6 @@
 
 ECHIRON is a human-first personal progress and encouragement application designed to help users organize priorities, recognize completed effort, protect focused time, and continue moving forward without replacing human agency.
 
-ECHIRON is intended to support productivity by helping users organize tasks, maintain focus, and build positive momentum through encouragement and progress tracking while keeping the user in control of their decisions.
-
 The repository preserves two working implementations of the same product:
 
 - `ECHIRON/` — the established Expo and React Native implementation written in TypeScript.
@@ -47,9 +45,9 @@ The native project uses Kotlin, Jetpack Compose, Material 3, Android DataStore, 
 - Native Kotlin/Compose source: completed
 - Pure Kotlin domain compilation: passed
 - Android manifest and resource parsing: passed
-- Current team integration branch for active work: `DavidPersonal`
-- Prior native milestone work: merged into `dev`
-- Full Android Studio Gradle sync, emulator launch, tests, lint, and debug APK build: required local-machine validation step for the current Calendar integration
+- Personal branch submission: completed on `david-fulmer-personal`
+- Shared integration: merged into `dev`
+- Full Android Studio Gradle sync, emulator launch, tests, lint, and debug APK build: final local-machine verification step
 
 ## Build the Native Android Edition
 
@@ -78,32 +76,28 @@ ECHIRON-Android/app/build/outputs/apk/debug/app-debug.apk
 
 ## Branch Workflow
 
-1. Develop and commit work on your assigned personal branch.
-2. Keep your personal branch synchronized with `dev`.
-3. Integrate teammate work into the active team integration branch and resolve conflicts without overwriting either teammate's valid work.
-4. Test combined work before moving cards to Waiting for review.
-5. Merge completed and reviewed work into `dev` for shared integration.
-6. Leave `main` to the designated Build Master.
+1. Develop and commit work on `david-fulmer-personal`.
+2. Keep the personal branch synchronized with `dev`.
+3. Merge completed and reviewed work into `dev` for shared integration.
+4. Leave `main` to the designated Build Master.
 
-## Google Calendar Integration — Active Implementation
+## Google Calendar Integration — Initial Implementation
 
-Google Calendar integration development is underway for the native ECHIRON Android application. The project includes the Google Play Services authentication dependency required for Google authorization.
+Google Calendar integration development has begun for the native Echiron Android application. The project now includes the Google Play Services authentication dependency required for Google authorization.
 
-A dedicated `GoogleCalendarAuthorization.kt` integration layer handles Google Calendar authorization separately from the UI. `GoogleCalendarIntegrationScreen.kt` provides the user-facing Connect Google Calendar interface and is connected to ECHIRON's main application/navigation structure through `EchironApp.kt`.
+A dedicated `GoogleCalendarAuthorization.kt` integration layer was added to handle Google Calendar authorization separately from the UI. A new `GoogleCalendarIntegrationScreen.kt` was added to provide the user-facing Connect Google Calendar interface.
 
-The implementation requests read-only Google Calendar access, following least-privilege principles. ECHIRON does not request permission to create, edit, or delete Google Calendar events in this first version.
+The Calendar integration screen has been connected to Echiron's main application/navigation structure through `EchironApp.kt`.
 
-The current implementation now goes beyond the authorization foundation. `GoogleCalendarApi.kt` uses the granted OAuth access token to retrieve the user's visible calendar list and load upcoming events from the primary or selected calendar. Returned Calendar event data is mapped into ECHIRON-facing models with stable Google event IDs, title, description, start/end values, all-day state, location, status, recurrence information, and update timestamps. The integration screen now displays a preview of returned calendars and upcoming events after successful authorization.
+The initial implementation requests read-only Google Calendar access, following least-privilege principles. Echiron does not need permission to modify a user's Google Calendar for this first version.
 
-The next validation stage is to pull the combined branch locally, run the Android build/tests, complete a real Google consent flow on an emulator or Android device, and verify returned Calendar data before moving the implementation cards to Waiting for review.
+This is currently the authorization foundation, not the completed Calendar synchronization system. The next development stage will connect the OAuth configuration, retrieve the user's available calendars and events, map those events into Echiron, and test the authorization flow on an Android device/emulator.
 
 No Google passwords, OAuth secrets, access tokens, or other private credentials should ever be committed to the repository or documented in the README.
 
-### Calendar Integration Files
+### Files Affected
 
 - `ECHIRON-Android/app/build.gradle.kts`
-- `ECHIRON-Android/app/src/main/AndroidManifest.xml`
 - `ECHIRON-Android/app/src/main/java/com/flameborne/echiron/integration/google/GoogleCalendarAuthorization.kt`
-- `ECHIRON-Android/app/src/main/java/com/flameborne/echiron/integration/google/GoogleCalendarApi.kt`
 - `ECHIRON-Android/app/src/main/java/com/flameborne/echiron/ui/GoogleCalendarIntegrationScreen.kt`
 - `ECHIRON-Android/app/src/main/java/com/flameborne/echiron/ui/EchironApp.kt`
