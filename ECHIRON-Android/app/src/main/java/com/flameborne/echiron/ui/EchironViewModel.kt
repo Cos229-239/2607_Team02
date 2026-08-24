@@ -4,6 +4,8 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.flameborne.echiron.data.EchironRepository
+import com.flameborne.echiron.integration.google.GoogleCalendarEvent
+import com.flameborne.echiron.integration.google.GoogleCalendarTaskMapper
 import com.flameborne.echiron.model.DayKey
 import com.flameborne.echiron.model.EchironState
 import com.flameborne.echiron.model.EchironTask
@@ -53,6 +55,12 @@ class EchironViewModel(application: Application) : AndroidViewModel(application)
                     createdAt = Instant.now().toString(),
                 ),
             )
+        }
+    }
+
+    fun importCalendarEvent(event: GoogleCalendarEvent) {
+        viewModelScope.launch {
+            repository.upsertTask(GoogleCalendarTaskMapper.toTask(event))
         }
     }
 
