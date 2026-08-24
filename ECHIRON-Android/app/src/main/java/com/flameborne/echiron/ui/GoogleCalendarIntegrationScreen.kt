@@ -21,6 +21,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -28,15 +29,20 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.flameborne.echiron.integration.google.GoogleCalendarApi
 import com.flameborne.echiron.integration.google.GoogleCalendarAuthorization
+import com.flameborne.echiron.integration.google.GoogleCalendarEvent
 import com.google.android.gms.auth.api.identity.AuthorizationResult
 
 @Composable
-fun GoogleCalendarIntegrationScreen() {
+fun GoogleCalendarIntegrationScreen(
+    onImportEvent: (GoogleCalendarEvent) -> Unit,
+) {
     val context = LocalContext.current
     val activity = context.findActivity()
     var connectionStatus by rememberSaveable { mutableStateOf("Not connected") }
     var calendarPreview by rememberSaveable { mutableStateOf("") }
     var eventPreview by rememberSaveable { mutableStateOf("") }
+    var importStatus by rememberSaveable { mutableStateOf("") }
+    var loadedEvents by remember { mutableStateOf(emptyList<GoogleCalendarEvent>()) }
 
     val handleAuthorization: (AuthorizationResult) -> Unit = { authorizationResult ->
         val accessToken = authorizationResult.accessToken
@@ -46,14 +52,17 @@ fun GoogleCalendarIntegrationScreen() {
             connectionStatus = "Google Calendar connected — loading calendars…"
             calendarPreview = ""
             eventPreview = ""
+            importStatus = ""
+            loadedEvents = emptyList()
 
             loadCalendarPreview(
                 activity = activity,
                 accessToken = accessToken,
-                onLoaded = { calendarsText, eventsText ->
+                onLoaded = { calendarsText, eventsText, events ->
                     connectionStatus = "Google Calendar connected"
                     calendarPreview = calendarsText
                     eventPreview = eventsText
+                    loadedEvents = events
                 },
                 onError = { error ->
                     connectionStatus = "Calendar data load failed: ${error.localizedMessage ?: "Unknown error"}"
@@ -111,6 +120,8 @@ fun GoogleCalendarIntegrationScreen() {
                         connectionStatus = "Connecting to Google Calendar…"
                         calendarPreview = ""
                         eventPreview = ""
+                        importStatus = ""
+                        loadedEvents = emptyList()
 
                         GoogleCalendarAuthorization.authorize(
                             activity = hostActivity,
@@ -154,6 +165,25 @@ fun GoogleCalendarIntegrationScreen() {
                         style = MaterialTheme.typography.titleMedium,
                     )
                     Text(eventPreview)
+
+                    loadedEvents.firstOrNull()?.let { event ->
+                        Button(
+                            onClick = {
+                                onImportEvent(event)
+                                importStatus = "Imported '${event.title}' into ECHIRON tasks"
+                            },
+                        ) {
+                            Text("Import next event to ECHIRON")
+                        }
+                    }
+
+                    if (importStatus.isNotBlank()) {
+                        Text(
+                            text = importStatus,
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.primary,
+                        )
+                    }
                 }
             }
         }
@@ -169,7 +199,7 @@ fun GoogleCalendarIntegrationScreen() {
 private fun loadCalendarPreview(
     activity: Activity,
     accessToken: String,
-    onLoaded: (String, String) -> Unit,
+    onLoaded: (String, String, List<GoogleCalendarEvent>) -> Unit,
     onError: (Throwable) -> Unit,
 ) {
     Thread {
@@ -203,10 +233,10 @@ private fun loadCalendarPreview(
                 }
             }
 
-            calendarsText to eventsText
-        }.onSuccess { (calendarsText, eventsText) ->
+            Triple(calendarsText, eventsText, events)
+        }.onSuccess { (calendarsText, eventsText, events) ->
             activity.runOnUiThread {
-                onLoaded(calendarsText, eventsText)
+                onLoaded(calendarsText, eventsText, events)
             }
         }.onFailure { error ->
             activity.runOnUiThread {
