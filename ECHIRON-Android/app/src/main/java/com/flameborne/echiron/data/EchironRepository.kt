@@ -68,6 +68,23 @@ class EchironRepository(private val context: Context) {
         }
     }
 
+    suspend fun upsertTask(task: EchironTask) {
+        context.echironDataStore.edit { preferences ->
+            val tasks = decodeTasks(preferences[Keys.tasks]).toMutableList()
+            val existingIndex = tasks.indexOfFirst { it.id == task.id }
+            if (existingIndex >= 0) {
+                val existing = tasks[existingIndex]
+                tasks[existingIndex] = task.copy(
+                    completed = existing.completed,
+                    completedAt = existing.completedAt,
+                )
+            } else {
+                tasks.add(task)
+            }
+            preferences[Keys.tasks] = encodeTasks(tasks)
+        }
+    }
+
     suspend fun toggleTask(taskId: String) {
         context.echironDataStore.edit { preferences ->
             val tasks = decodeTasks(preferences[Keys.tasks]).toMutableList()
