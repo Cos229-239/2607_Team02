@@ -6,12 +6,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.AutoAwesome
-import androidx.compose.material.icons.filled.CalendarMonth
+import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.List
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Insights
-import androidx.compose.material.icons.filled.Link
-import androidx.compose.material.icons.filled.TaskAlt
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
@@ -41,11 +41,11 @@ import com.flameborne.echiron.ui.theme.EchironTheme
 
 private enum class AppSection(val label: String, val icon: ImageVector) {
     TODAY("Today", Icons.Default.Home),
-    TASKS("Tasks", Icons.Default.TaskAlt),
-    WEEK("Week", Icons.Default.CalendarMonth),
-    PROGRESS("Progress", Icons.Default.Insights),
-    ENCOURAGEMENT("Encourage", Icons.Default.AutoAwesome),
-    INTEGRATIONS("Connect", Icons.Default.Link),
+    TASKS("Tasks", Icons.Default.List),
+    WEEK("Week", Icons.Default.DateRange),
+    PROGRESS("Progress", Icons.Default.Star),
+    ENCOURAGEMENT("Encourage", Icons.Default.Favorite),
+    INTEGRATIONS("Connect", Icons.Default.Settings),
 }
 
 @Composable

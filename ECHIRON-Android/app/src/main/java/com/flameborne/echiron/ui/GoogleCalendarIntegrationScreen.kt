@@ -12,7 +12,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CalendarMonth
+import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
@@ -133,7 +133,7 @@ fun GoogleCalendarIntegrationScreen(
                         )
                     },
                 ) {
-                    Icon(Icons.Default.CalendarMonth, contentDescription = null)
+                    Icon(Icons.Default.DateRange, contentDescription = null)
                     Text(" Connect Google Calendar")
                 }
             }
