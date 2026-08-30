@@ -11,6 +11,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material3.Button
@@ -90,6 +92,7 @@ fun GoogleCalendarIntegrationScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .verticalScroll(rememberScrollState())
             .padding(20.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
@@ -158,22 +161,61 @@ fun GoogleCalendarIntegrationScreen(
             Card(modifier = Modifier.fillMaxWidth()) {
                 Column(
                     modifier = Modifier.padding(16.dp),
-                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp),
                 ) {
                     Text(
                         text = "Upcoming events",
                         style = MaterialTheme.typography.titleMedium,
                     )
-                    Text(eventPreview)
 
-                    loadedEvents.firstOrNull()?.let { event ->
+                    if (loadedEvents.isEmpty()) {
+                        Text(eventPreview)
+                    } else {
+                        Text(
+                            text = "${loadedEvents.size} upcoming event${if (loadedEvents.size == 1) "" else "s"} available for import.",
+                            style = MaterialTheme.typography.bodyMedium,
+                        )
+
                         Button(
                             onClick = {
-                                onImportEvent(event)
-                                importStatus = "Imported '${event.title}' into ECHIRON tasks"
+                                loadedEvents.forEach(onImportEvent)
+                                importStatus = "Imported ${loadedEvents.size} Calendar event${if (loadedEvents.size == 1) "" else "s"} into ECHIRON tasks"
                             },
                         ) {
-                            Text("Import next event to ECHIRON")
+                            Text("Import all upcoming events")
+                        }
+
+                        loadedEvents.forEach { event ->
+                            Card(modifier = Modifier.fillMaxWidth()) {
+                                Column(
+                                    modifier = Modifier.padding(12.dp),
+                                    verticalArrangement = Arrangement.spacedBy(6.dp),
+                                ) {
+                                    Text(
+                                        text = event.title,
+                                        style = MaterialTheme.typography.titleSmall,
+                                    )
+                                    Text(
+                                        text = event.start ?: "No start time",
+                                        style = MaterialTheme.typography.bodyMedium,
+                                    )
+                                    event.location?.takeIf { it.isNotBlank() }?.let { location ->
+                                        Text(
+                                            text = location,
+                                            style = MaterialTheme.typography.bodySmall,
+                                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                        )
+                                    }
+                                    Button(
+                                        onClick = {
+                                            onImportEvent(event)
+                                            importStatus = "Imported '${event.title}' into ECHIRON tasks"
+                                        },
+                                    ) {
+                                        Text("Import event")
+                                    }
+                                }
+                            }
                         }
                     }
 
@@ -227,10 +269,7 @@ private fun loadCalendarPreview(
             val eventsText = when {
                 selectedCalendar == null -> "No calendar is available for event retrieval."
                 events.isEmpty() -> "No upcoming events were returned from ${selectedCalendar.summary}."
-                else -> events.take(5).joinToString("\n") { event ->
-                    val startLabel = event.start ?: "No start time"
-                    "• ${event.title} — $startLabel"
-                }
+                else -> "Loaded ${events.size} upcoming event${if (events.size == 1) "" else "s"} from ${selectedCalendar.summary}."
             }
 
             Triple(calendarsText, eventsText, events)
